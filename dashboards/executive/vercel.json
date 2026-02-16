@@ -1,0 +1,11 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "out",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "env": {
+    "NEXT_PUBLIC_ERPNEXT_URL": "@erpnext_url",
+    "NEXT_PUBLIC_ERPNEXT_API_KEY": "@erpnext_api_key",
+    "NEXT_PUBLIC_ERPNEXT_API_SECRET": "@erpnext_api_secret"
+  }
+}
