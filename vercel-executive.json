@@ -1,0 +1,12 @@
+{
+  "buildCommand": "cd dashboards/executive && npm install && npm run build",
+  "outputDirectory": "dashboards/executive/.next",
+  "installCommand": "cd dashboards/executive && npm install",
+  "framework": "nextjs",
+  "regions": ["iad1"],
+  "env": {
+    "NEXT_PUBLIC_ERPNEXT_URL": "@erpnext-url",
+    "NEXT_PUBLIC_ERPNEXT_API_KEY": "@erpnext-api-key",
+    "NEXT_PUBLIC_ERPNEXT_API_SECRET": "@erpnext-api-secret"
+  }
+}
