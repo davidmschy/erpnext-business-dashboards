@@ -1,0 +1,309 @@
+{
+  "dashboard_name": "FBX Sales Pipeline",
+  "dashboard_type": "sales",
+  "description": "Comprehensive sales pipeline tracking for FBX marketplace deals across all stages from lead to closed-won",
+  "refresh_interval": 300,
+  "stages": [
+    {
+      "stage_id": "lead",
+      "stage_name": "Lead",
+      "stage_order": 1,
+      "description": "Initial contact or inquiry from potential buyer, landowner, or partner",
+      "color": "#9CA3AF",
+      "default_probability": 10,
+      "typical_duration_days": 7,
+      "actions": [
+        "Qualify lead",
+        "Schedule discovery call",
+        "Send information package"
+      ]
+    },
+    {
+      "stage_id": "qualified",
+      "stage_name": "Qualified",
+      "stage_order": 2,
+      "description": "Lead has been vetted and meets qualification criteria for budget, timeline, and fit",
+      "color": "#60A5FA",
+      "default_probability": 25,
+      "typical_duration_days": 14,
+      "actions": [
+        "Conduct needs analysis",
+        "Present solution options",
+        "Prepare preliminary proposal"
+      ]
+    },
+    {
+      "stage_id": "loi",
+      "stage_name": "LOI",
+      "stage_order": 3,
+      "description": "Letter of Intent signed, parties have agreed to move forward with negotiations",
+      "color": "#34D399",
+      "default_probability": 40,
+      "typical_duration_days": 21,
+      "actions": [
+        "Execute LOI",
+        "Establish timeline",
+        "Assign project team",
+        "Begin due diligence prep"
+      ]
+    },
+    {
+      "stage_id": "due-diligence",
+      "stage_name": "Due Diligence",
+      "stage_order": 4,
+      "description": "Detailed investigation of property, financials, permits, and all transaction elements",
+      "color": "#FBBF24",
+      "default_probability": 60,
+      "typical_duration_days": 30,
+      "actions": [
+        "Property inspection",
+        "Title search",
+        "Environmental assessment",
+        "Review financials",
+        "Verify permits and zoning"
+      ]
+    },
+    {
+      "stage_id": "financing",
+      "stage_name": "Financing",
+      "stage_order": 5,
+      "description": "Securing funding, finalizing loan terms, arranging equity partners",
+      "color": "#F59E0B",
+      "default_probability": 75,
+      "typical_duration_days": 45,
+      "actions": [
+        "Submit loan application",
+        "Secure pre-approval",
+        "Finalize financing terms",
+        "Coordinate with lenders",
+        "Structure equity arrangements"
+      ]
+    },
+    {
+      "stage_id": "closing",
+      "stage_name": "Closing",
+      "stage_order": 6,
+      "description": "Final documentation, contract execution, and transaction completion preparation",
+      "color": "#8B5CF6",
+      "default_probability": 90,
+      "typical_duration_days": 14,
+      "actions": [
+        "Review closing documents",
+        "Schedule closing date",
+        "Coordinate with title company",
+        "Final walk-through",
+        "Wire transfer arrangements"
+      ]
+    },
+    {
+      "stage_id": "closed-won",
+      "stage_name": "Closed Won",
+      "stage_order": 7,
+      "description": "Deal successfully completed, transaction closed, revenue recognized",
+      "color": "#10B981",
+      "default_probability": 100,
+      "typical_duration_days": 0,
+      "actions": [
+        "Complete post-closing tasks",
+        "Initiate customer onboarding",
+        "Request testimonial",
+        "Identify upsell opportunities"
+      ]
+    },
+    {
+      "stage_id": "closed-lost",
+      "stage_name": "Closed Lost",
+      "stage_order": 8,
+      "description": "Deal did not close, opportunity lost",
+      "color": "#EF4444",
+      "default_probability": 0,
+      "typical_duration_days": 0,
+      "actions": [
+        "Document loss reason",
+        "Conduct post-mortem",
+        "Maintain relationship for future opportunities"
+      ]
+    }
+  ],
+  "metrics": [
+    {
+      "metric_id": "total_pipeline_value",
+      "metric_name": "Total Pipeline Value",
+      "metric_type": "currency",
+      "calculation": "sum",
+      "field": "deal_value",
+      "filter": "stage not in ('closed-won', 'closed-lost')",
+      "display_order": 1
+    },
+    {
+      "metric_id": "weighted_pipeline",
+      "metric_name": "Weighted Pipeline",
+      "metric_type": "currency",
+      "calculation": "sum",
+      "field": "deal_value * probability",
+      "filter": "stage not in ('closed-won', 'closed-lost')",
+      "display_order": 2
+    },
+    {
+      "metric_id": "total_deals",
+      "metric_name": "Total Active Deals",
+      "metric_type": "count",
+      "calculation": "count",
+      "field": "deal_id",
+      "filter": "stage not in ('closed-won', 'closed-lost')",
+      "display_order": 3
+    },
+    {
+      "metric_id": "avg_deal_size",
+      "metric_name": "Average Deal Size",
+      "metric_type": "currency",
+      "calculation": "average",
+      "field": "deal_value",
+      "filter": "stage not in ('closed-won', 'closed-lost')",
+      "display_order": 4
+    },
+    {
+      "metric_id": "win_rate",
+      "metric_name": "Win Rate",
+      "metric_type": "percentage",
+      "calculation": "custom",
+      "formula": "(closed_won_count / (closed_won_count + closed_lost_count)) * 100",
+      "time_period": "last_90_days",
+      "display_order": 5
+    },
+    {
+      "metric_id": "avg_sales_cycle",
+      "metric_name": "Average Sales Cycle",
+      "metric_type": "days",
+      "calculation": "average",
+      "field": "days_from_lead_to_close",
+      "filter": "stage = 'closed-won'",
+      "time_period": "last_90_days",
+      "display_order": 6
+    },
+    {
+      "metric_id": "conversion_rate_by_stage",
+      "metric_name": "Stage Conversion Rates",
+      "metric_type": "percentage",
+      "calculation": "custom",
+      "formula": "(stage_n_won / stage_n_entered) * 100",
+      "group_by": "stage",
+      "display_order": 7
+    }
+  ],
+  "charts": [
+    {
+      "chart_id": "pipeline_by_stage",
+      "chart_name": "Pipeline Value by Stage",
+      "chart_type": "funnel",
+      "x_axis": "stage_name",
+      "y_axis": "sum(deal_value)",
+      "filter": "stage not in ('closed-won', 'closed-lost')",
+      "sort_order": "stage_order"
+    },
+    {
+      "chart_id": "deal_velocity",
+      "chart_name": "Deal Velocity Trend",
+      "chart_type": "line",
+      "x_axis": "week",
+      "y_axis": "count(deal_id)",
+      "group_by": "stage",
+      "time_period": "last_90_days"
+    },
+    {
+      "chart_id": "win_loss_analysis",
+      "chart_name": "Win/Loss Analysis",
+      "chart_type": "bar",
+      "x_axis": "month",
+      "y_axis": "count(deal_id)",
+      "group_by": "stage",
+      "filter": "stage in ('closed-won', 'closed-lost')",
+      "time_period": "last_12_months"
+    },
+    {
+      "chart_id": "deal_aging",
+      "chart_name": "Deal Aging by Stage",
+      "chart_type": "stacked_bar",
+      "x_axis": "stage_name",
+      "y_axis": "count(deal_id)",
+      "group_by": "age_bucket",
+      "buckets": ["0-30 days", "31-60 days", "61-90 days", "90+ days"]
+    }
+  ],
+  "filters": [
+    {
+      "filter_id": "date_range",
+      "filter_name": "Date Range",
+      "filter_type": "date_range",
+      "default_value": "current_quarter"
+    },
+    {
+      "filter_id": "deal_type",
+      "filter_name": "Deal Type",
+      "filter_type": "multiselect",
+      "options": ["sale", "joint-venture", "lease", "development"],
+      "default_value": "all"
+    },
+    {
+      "filter_id": "participant_type",
+      "filter_name": "Participant Type",
+      "filter_type": "multiselect",
+      "options": ["buyer", "landowner", "manufacturer", "investor", "lender", "contractor"],
+      "default_value": "all"
+    },
+    {
+      "filter_id": "assigned_to",
+      "filter_name": "Sales Rep",
+      "filter_type": "user_select",
+      "default_value": "all"
+    },
+    {
+      "filter_id": "property_location",
+      "filter_name": "Property Location",
+      "filter_type": "text",
+      "default_value": "all"
+    }
+  ],
+  "alerts": [
+    {
+      "alert_id": "stale_deals",
+      "alert_name": "Stale Deals Alert",
+      "alert_type": "warning",
+      "condition": "days_in_stage > typical_duration_days * 1.5",
+      "notification_frequency": "weekly"
+    },
+    {
+      "alert_id": "high_value_at_risk",
+      "alert_name": "High Value Deal At Risk",
+      "alert_type": "critical",
+      "condition": "deal_value > 1000000 AND days_in_stage > typical_duration_days * 2",
+      "notification_frequency": "immediate"
+    },
+    {
+      "alert_id": "closing_soon",
+      "alert_name": "Deals Closing This Week",
+      "alert_type": "info",
+      "condition": "expected_close_date <= today + 7 AND stage in ('financing', 'closing')",
+      "notification_frequency": "daily"
+    }
+  ],
+  "integrations": {
+    "erpnext_doctype": "Opportunity",
+    "stage_field": "sales_stage",
+    "value_field": "opportunity_amount",
+    "probability_field": "probability",
+    "owner_field": "opportunity_owner",
+    "created_date_field": "creation",
+    "expected_close_date_field": "expected_closing",
+    "custom_fields": [
+      "participant_type",
+      "property_id",
+      "deal_type"
+    ]
+  },
+  "permissions": {
+    "view": ["Sales Team", "Sales Manager", "CEO"],
+    "edit": ["Sales Manager", "CEO"],
+    "export": ["Sales Manager", "CEO"]
+  }
+}
